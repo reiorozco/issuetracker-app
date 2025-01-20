@@ -1,8 +1,15 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import classNames from "classnames";
 import { MdBugReport } from "react-icons/md";
+import { usePathname } from "next/navigation";
 
 function NavBar() {
+  const currentPath = usePathname();
+  console.log("currentPath: ", currentPath);
+
   const links = [
     { href: "/", label: "Dashboard" },
     { href: "/issues", label: "Issues" },
@@ -19,7 +26,11 @@ function NavBar() {
           <li key={label}>
             <Link
               href={href}
-              className="text-zinc-400 hover:text-zinc-800 transition-colors"
+              className={classNames({
+                "text-zinc-900": currentPath === href,
+                "text-zinc-400": currentPath !== href,
+                "hover:text-zinc-800 transition-colors": true,
+              })}
             >
               {label}
             </Link>
