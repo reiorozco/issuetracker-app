@@ -1,8 +1,21 @@
-import React from "react";
-import { Button, TextArea, TextField } from "@radix-ui/themes";
+"use client";
+
+import React, { useMemo } from "react";
+import { Button, TextField } from "@radix-ui/themes";
 import { MdAdd } from "react-icons/md";
+import SimpleMDE from "react-simplemde-editor";
+import EasyMDE from "easymde";
+
+import "easymde/dist/easymde.min.css";
 
 function NewIssuePage() {
+  const SimpleMDEOptions = useMemo(() => {
+    return {
+      // spellChecker: false,
+      status: false,
+    } as EasyMDE.Options;
+  }, []);
+
   return (
     <div className="max-w-xl space-y-2">
       <TextField.Root placeholder="Title...">
@@ -11,7 +24,7 @@ function NewIssuePage() {
         </TextField.Slot>
       </TextField.Root>
 
-      <TextArea placeholder="Description..." />
+      <SimpleMDE placeholder="Description..." options={SimpleMDEOptions} />
 
       <Button>Submit New Issue</Button>
     </div>
