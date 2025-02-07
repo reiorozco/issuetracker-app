@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useMemo } from "react";
-import { Button, TextField } from "@radix-ui/themes";
-import { MdAdd } from "react-icons/md";
+import React, { useMemo, useState } from "react";
+import { Button, Callout, TextField } from "@radix-ui/themes";
+import { MdAdd, MdInfoOutline } from "react-icons/md";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import SimpleMDE from "react-simplemde-editor";
@@ -17,6 +17,8 @@ interface IssueForm {
 }
 
 function NewIssuePage() {
+  const [error, setError] = useState("");
+
   const router = useRouter();
   const { register, control, handleSubmit } = useForm<IssueForm>();
 
@@ -28,35 +30,52 @@ function NewIssuePage() {
   }, []);
 
   return (
-    <form
-      className="max-w-xl space-y-2"
-      onSubmit={handleSubmit(async (data) => {
-        console.log("IssueForm: ", data);
+    <div className="max-w-xl space-y-2">
+      {error && (
+        <Callout.Root color="tomato">
+          <Callout.Icon>
+            <MdInfoOutline />
+          </Callout.Icon>
 
-        await axios.post("/api/issues", data);
-        router.push("/issues");
-      })}
-    >
-      <TextField.Root placeholder="Title..." {...register("title")}>
-        <TextField.Slot>
-          <MdAdd height="16" width="16" />
-        </TextField.Slot>
-      </TextField.Root>
+          <Callout.Text>{error}</Callout.Text>
+        </Callout.Root>
+      )}
 
-      <Controller
-        name="description"
-        control={control}
-        render={({ field }) => (
-          <SimpleMDE
-            placeholder="Description..."
-            options={SimpleMDEOptions}
-            {...field}
-          />
-        )}
-      />
+      <form
+        className="space-y-2"
+        onSubmit={handleSubmit(async (data) => {
+          console.log("IssueForm: ", data);
 
-      <Button type="submit">Submit New Issue</Button>
-    </form>
+          try {
+            await axios.post("/api/issues", data);
+            router.push("/issues");
+          } catch (e) {
+            console.log("Error creating IssueForm: ", e);
+            setError("An unexpected error occurred.");
+          }
+        })}
+      >
+        <TextField.Root placeholder="Title..." {...register("title")}>
+          <TextField.Slot>
+            <MdAdd height="16" width="16" />
+          </TextField.Slot>
+        </TextField.Root>
+
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => (
+            <SimpleMDE
+              placeholder="Description..."
+              options={SimpleMDEOptions}
+              {...field}
+            />
+          )}
+        />
+
+        <Button type="submit">Submit New Issue</Button>
+      </form>
+    </div>
   );
 }
 
