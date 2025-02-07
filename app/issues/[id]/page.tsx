@@ -1,6 +1,18 @@
 import React from "react";
-import { prisma } from "@/prisma/client";
 import { notFound } from "next/navigation";
+import {
+  Card,
+  Code,
+  DataList,
+  Flex,
+  Grid,
+  Heading,
+  IconButton,
+  Text,
+} from "@radix-ui/themes";
+import { MdContentCopy } from "react-icons/md";
+import { prisma } from "@/prisma/client";
+import IssueStatusBadge from "@/app/components/IssueStatusBadge";
 
 interface Props {
   params: { id: string };
@@ -15,12 +27,66 @@ async function IssueDetailPage({ params }: Props) {
   if (!issue) notFound();
 
   return (
-    <div>
-      <p>Issue id: {issue.id}</p>
-      <p>Issue title: {issue.title}</p>
-      <p>Issue status: {issue.status}</p>
-      <p>Issue created: {issue.createdAt.toDateString()}</p>
-    </div>
+    <Grid columns="2" gap="8">
+      <Flex direction="column" gap="4">
+        <Heading>{issue.title}</Heading>
+
+        <Flex gap="4" align="center">
+          <IssueStatusBadge status={issue.status} />
+
+          <Text>{issue.createdAt.toDateString()}</Text>
+        </Flex>
+
+        <Card>{issue.description}</Card>
+      </Flex>
+
+      <DataList.Root>
+        <DataList.Item>
+          <DataList.Label minWidth="88px">Title</DataList.Label>
+
+          <DataList.Value>{issue.title}</DataList.Value>
+        </DataList.Item>
+
+        <DataList.Item>
+          <DataList.Label minWidth="88px">ID</DataList.Label>
+
+          <DataList.Value>
+            <Flex align="center" gap="2">
+              <Code variant="ghost">{issue.id}</Code>
+
+              <IconButton
+                size="1"
+                aria-label="Copy value"
+                color="gray"
+                variant="ghost"
+              >
+                <MdContentCopy />
+              </IconButton>
+            </Flex>
+          </DataList.Value>
+        </DataList.Item>
+
+        <DataList.Item align="center">
+          <DataList.Label minWidth="88px">Status</DataList.Label>
+
+          <DataList.Value>
+            <IssueStatusBadge status={issue.status} />
+          </DataList.Value>
+        </DataList.Item>
+
+        <DataList.Item>
+          <DataList.Label minWidth="88px">Description</DataList.Label>
+
+          <DataList.Value>{issue.description}</DataList.Value>
+        </DataList.Item>
+
+        <DataList.Item>
+          <DataList.Label minWidth="88px">Created</DataList.Label>
+
+          <DataList.Value>{issue.createdAt.toDateString()}</DataList.Value>
+        </DataList.Item>
+      </DataList.Root>
+    </Grid>
   );
 }
 
