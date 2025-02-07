@@ -6,7 +6,7 @@ function IssueActions() {
   return (
     <div className="my-4">
       <Button>
-        <Link href="issues/new">New Issue</Link>
+        <Link href="/issues/new">New Issue</Link>
       </Button>
     </div>
   );
