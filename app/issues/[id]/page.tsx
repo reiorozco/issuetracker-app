@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import { notFound } from "next/navigation";
 import {
   Card,
@@ -37,10 +38,12 @@ async function IssueDetailPage({ params }: Props) {
           <Text>{issue.createdAt.toDateString()}</Text>
         </Flex>
 
-        <Card>{issue.description}</Card>
+        <Card className="prose">
+          <ReactMarkdown>{issue.description}</ReactMarkdown>
+        </Card>
       </Flex>
 
-      <DataList.Root>
+      <DataList.Root className="h-fit">
         <DataList.Item>
           <DataList.Label minWidth="88px">Title</DataList.Label>
 
@@ -77,7 +80,11 @@ async function IssueDetailPage({ params }: Props) {
         <DataList.Item>
           <DataList.Label minWidth="88px">Description</DataList.Label>
 
-          <DataList.Value>{issue.description}</DataList.Value>
+          <DataList.Value>
+            <div>
+              <ReactMarkdown>{issue.description}</ReactMarkdown>
+            </div>
+          </DataList.Value>
         </DataList.Item>
 
         <DataList.Item>
