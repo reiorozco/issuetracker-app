@@ -13,11 +13,13 @@ import axios from "axios";
 import { z } from "zod";
 import { createIssueSchema } from "@/app/validationSchemas";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import TwSpinner from "@/app/components/TwSpinner";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
 function NewIssuePage() {
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
   const {
@@ -36,17 +38,21 @@ function NewIssuePage() {
     } as EasyMDE.Options;
   }, []);
 
-  const handleOnSubmit = async (data: IssueForm) => {
+  const onSubmit = handleSubmit(async (data) => {
     console.log("IssueForm: ", data);
 
     try {
+      setIsSubmitting(true);
+
       await axios.post("/api/issues", data);
       router.push("/issues");
     } catch (e) {
+      setIsSubmitting(false);
+
       console.log("Error creating IssueForm: ", e);
       setError("An unexpected error occurred.");
     }
-  };
+  });
 
   return (
     <div className="max-w-xl space-y-2">
@@ -60,7 +66,7 @@ function NewIssuePage() {
         </Callout.Root>
       )}
 
-      <form className="space-y-2" onSubmit={handleSubmit(handleOnSubmit)}>
+      <form className="space-y-2" onSubmit={onSubmit}>
         <TextField.Root placeholder="Title..." {...register("title")}>
           <TextField.Slot>
             <MdAdd height="16" width="16" />
@@ -81,7 +87,10 @@ function NewIssuePage() {
         />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
 
-        <Button type="submit">Submit New Issue</Button>
+        <Button type="submit" disabled={isSubmitting}>
+          Submit New Issue
+          {isSubmitting && <TwSpinner />}
+        </Button>
       </form>
     </div>
   );
