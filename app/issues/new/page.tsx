@@ -12,8 +12,7 @@ import "easymde/dist/easymde.min.css";
 import axios from "axios";
 import { z } from "zod";
 import { createIssueSchema } from "@/app/validationSchemas";
-import ErrorMessage from "@/app/components/ErrorMessage";
-import TwSpinner from "@/app/components/TwSpinner";
+import { ErrorMessage, TwSpinner } from "@/app/components";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,

@@ -13,7 +13,7 @@ import {
 } from "@radix-ui/themes";
 import { MdContentCopy } from "react-icons/md";
 import { prisma } from "@/prisma/client";
-import IssueStatusBadge from "@/app/components/IssueStatusBadge";
+import { IssueStatusBadge } from "@/app/components";
 
 interface Props {
   params: { id: string };
