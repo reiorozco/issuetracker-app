@@ -12,14 +12,14 @@ import "easymde/dist/easymde.min.css";
 import axios from "axios";
 import { z } from "zod";
 import { Issue } from "@prisma/client";
-import { createIssueSchema } from "@/app/validationSchemas";
+import { IssueSchema } from "@/app/validationSchemas";
 import { ErrorMessage, TwSpinner } from "@/app/components";
 
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
 });
 
-type IssueFormData = z.infer<typeof createIssueSchema>;
+type IssueFormData = z.infer<typeof IssueSchema>;
 
 function IssueForm({ issue }: { issue?: Issue }) {
   const [error, setError] = useState("");
@@ -32,7 +32,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
     handleSubmit,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(createIssueSchema),
+    resolver: zodResolver(IssueSchema),
   });
 
   const SimpleMDEOptions = useMemo(() => {
