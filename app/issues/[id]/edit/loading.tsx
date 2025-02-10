@@ -1,8 +1,8 @@
 import React from "react";
 import IssueFormSkeleton from "@/app/issues/_components/IssueFormSkeleton";
 
-function LoadingNewIssuePage() {
+function LoadingEditIssuePage() {
   return <IssueFormSkeleton />;
 }
 
-export default LoadingNewIssuePage;
+export default LoadingEditIssuePage;
