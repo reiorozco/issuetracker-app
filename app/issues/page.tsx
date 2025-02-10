@@ -5,10 +5,12 @@ import { prisma } from "@/prisma/client";
 import IssueActions from "@/app/issues/IssueActions";
 import { IssueStatusBadge, Link } from "@/app/components";
 
+export const dynamic = "force-dynamic";
+
 async function IssuesPage() {
   const issues = await prisma.issue.findMany();
 
-  const result = await delay(2000, { value: "🦄" });
+  const result = await delay(1000, { value: "🦄" });
   console.log("Issues page loaded: ", result);
 
   return (
