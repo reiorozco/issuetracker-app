@@ -5,19 +5,23 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { MdDeleteOutline } from "react-icons/md";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
+import { TwSpinner } from "@/app/components";
 
 function DeleteIssueButton({ issueId }: { issueId: number }) {
   const [error, setError] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const router = useRouter();
 
   const deleteIssue = async () => {
     try {
+      setIsDeleting(true);
       await axios.delete(`/api/issues/${issueId}`);
 
       router.push("/issues");
       router.refresh();
     } catch (error) {
+      setIsDeleting(false);
       setError(true);
     }
   };
@@ -26,9 +30,10 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
     <>
       <AlertDialog.Root>
         <AlertDialog.Trigger>
-          <Button color="tomato">
-            <MdDeleteOutline />
+          <Button color="tomato" disabled={isDeleting}>
+            {!isDeleting && <MdDeleteOutline />}
             Delete Issue
+            {isDeleting && <TwSpinner />}
           </Button>
         </AlertDialog.Trigger>
 
