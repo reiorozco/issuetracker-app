@@ -16,7 +16,7 @@ interface Props {
   issue: Issue;
 }
 
-export function IssueDetails({
+export default function IssueDetails({
   issue: { title, id, status, createdAt, description },
 }: Props) {
   return (
@@ -58,7 +58,7 @@ export function IssueDetails({
         </DataList.Item>
       </DataList.Root>
 
-      <Card className="prose">
+      <Card className="prose max-w-full">
         <ReactMarkdown>{description}</ReactMarkdown>
       </Card>
     </Flex>
