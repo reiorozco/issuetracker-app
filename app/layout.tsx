@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Container, Theme } from "@radix-ui/themes";
 import NavBar from "@/app/NavBar";
+import QueryClientProvider from "@/app/QueryClientProvider";
 import AuthProvider from "@/app/auth/Provider";
 
 import "@radix-ui/themes/styles.css";
@@ -23,15 +24,17 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="en">
       <body className={inter.variable}>
-        <AuthProvider>
-          <Theme>
-            <NavBar />
+        <QueryClientProvider>
+          <AuthProvider>
+            <Theme>
+              <NavBar />
 
-            <main className="px-6">
-              <Container>{children}</Container>
-            </main>
-          </Theme>
-        </AuthProvider>
+              <main className="px-6">
+                <Container>{children}</Container>
+              </main>
+            </Theme>
+          </AuthProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
