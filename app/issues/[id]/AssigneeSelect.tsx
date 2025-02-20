@@ -4,9 +4,9 @@ import React from "react";
 import axios from "axios";
 import { Select, Skeleton } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
-import { User } from "@prisma/client";
+import { Issue, User } from "@prisma/client";
 
-function AssigneeSelect() {
+function AssigneeSelect({ issue }: { issue: Issue }) {
   const {
     data: users,
     error,
@@ -23,21 +23,27 @@ function AssigneeSelect() {
   if (error) return null;
 
   return (
-    <Select.Root>
+    <Select.Root
+      defaultValue={issue.assignedToUserId || "0"}
+      onValueChange={(userId) => {
+        axios.patch(`/api/issues/${issue.id}`, {
+          assignedToUserId: userId === "0" ? null : userId,
+        });
+      }}
+    >
       <Select.Trigger placeholder="Assign..." />
 
-      <Select.Content>
+      <Select.Content position="popper">
         <Select.Group>
           <Select.Label>Suggestions</Select.Label>
 
+          <Select.Item value="0">Unassigned</Select.Item>
+
           {users?.map((user) => (
-            <Select.Item key={user.email} value="1">
+            <Select.Item key={user.email} value={user.id}>
               {user.name}
             </Select.Item>
           ))}
-
-          <Select.Item value="2">John Doe</Select.Item>
-          <Select.Item value="3">Agus Clavijo</Select.Item>
         </Select.Group>
       </Select.Content>
     </Select.Root>
