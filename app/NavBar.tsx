@@ -6,7 +6,7 @@ import classNames from "classnames";
 import { MdBugReport } from "react-icons/md";
 import { usePathname } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Box } from "@radix-ui/themes";
+import { Avatar, Box, Container, DropdownMenu, Flex } from "@radix-ui/themes";
 
 function NavBar() {
   const currentPath = usePathname();
@@ -19,37 +19,64 @@ function NavBar() {
   ];
 
   return (
-    <nav className="flex space-x-4 border-b border-gray-200 mb-6 px-6 h-12 items-center">
-      <Link href="/">
-        <MdBugReport size="2em" />
-      </Link>
-
-      <ul className="flex flex-wrap space-x-4">
-        {links.map(({ href, label }) => (
-          <li key={label}>
-            <Link
-              href={href}
-              className={classNames({
-                "text-zinc-900": currentPath === href,
-                "text-zinc-400": currentPath !== href,
-                "hover:text-zinc-800 transition-colors": true,
-              })}
-            >
-              {label}
+    <nav className="border-b border-gray-200 mb-6 px-6 py-4">
+      <Container>
+        <Flex justify="between" align="center">
+          <Flex align="center" gap="4">
+            <Link href="/">
+              <MdBugReport size="2em" />
             </Link>
-          </li>
-        ))}
-      </ul>
 
-      <Box>
-        {status === "authenticated" && (
-          <Link href="/api/auth/signout">Log out ({session?.user?.name})</Link>
-        )}
+            <ul className="flex flex-wrap space-x-4">
+              {links.map(({ href, label }) => (
+                <li key={label}>
+                  <Link
+                    href={href}
+                    className={classNames({
+                      "text-zinc-900": currentPath === href,
+                      "text-zinc-400": currentPath !== href,
+                      "hover:text-zinc-800 transition-colors": true,
+                    })}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Flex>
 
-        {status === "unauthenticated" && (
-          <Link href="/api/auth/signin">Login</Link>
-        )}
-      </Box>
+          <Box>
+            {status === "authenticated" && (
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <Avatar
+                    fallback="?"
+                    src={session?.user?.image!}
+                    size="2"
+                    radius="full"
+                    className="cursor-pointer"
+                  />
+                </DropdownMenu.Trigger>
+
+                <DropdownMenu.Content>
+                  <DropdownMenu.Label>
+                    {session?.user?.email}
+                  </DropdownMenu.Label>
+
+                  <DropdownMenu.Separator />
+                  <DropdownMenu.Item color="tomato">
+                    <Link href="/api/auth/signout">Log out</Link>
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            )}
+
+            {status === "unauthenticated" && (
+              <Link href="/api/auth/signin">Login</Link>
+            )}
+          </Box>
+        </Flex>
+      </Container>
     </nav>
   );
 }
