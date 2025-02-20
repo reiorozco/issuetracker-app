@@ -10,6 +10,12 @@
   --font-inter: "Inter", sans-serif;
 }
 
+@layer utilities {
+  .nav-link {
+    @apply text-zinc-400 hover:text-zinc-800 transition-colors;
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   /* :root { */
   /*   --foreground-rgb: 255, 255, 255; */
