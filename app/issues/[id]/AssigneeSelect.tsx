@@ -6,21 +6,27 @@ import toast, { Toaster } from "react-hot-toast";
 import { Issue, User } from "@prisma/client";
 import { Select, Skeleton } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 function AssigneeSelect({ issue }: { issue: Issue }) {
+  const router = useRouter();
   const { data: users, error, isLoading } = useUsers();
 
   if (isLoading) return <Skeleton height="2rem" />;
 
   if (error) return null;
 
-  const assignIssue = (userId: string) => {
-    axios
-      .patch(`/api/issues/${issue.id}`, {
+  const assignIssue = async (userId: string) => {
+    try {
+      await axios.patch(`/api/issues/${issue.id}`, {
         assignedToUserId: userId === "0" ? null : userId,
-      })
-      .then(() => console.log("Patch issue ok."))
-      .catch(() => toast.error("Changes could not be saved."));
+      });
+
+      console.log("Patch issue ok.");
+      router.refresh();
+    } catch (err) {
+      toast.error("Changes could not be saved.");
+    }
   };
 
   return (

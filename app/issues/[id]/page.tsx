@@ -17,10 +17,10 @@ async function IssueDetailPage({ params }: Props) {
   const session = await getServerSession(authOptions);
 
   if (isNaN(parseInt(params.id))) notFound();
+
   const issue = await prisma.issue.findUnique({
     where: { id: parseInt(params.id) },
   });
-
   if (!issue) notFound();
 
   return (
@@ -41,5 +41,7 @@ async function IssueDetailPage({ params }: Props) {
     </Grid>
   );
 }
+
+export const dynamic = "force-dynamic";
 
 export default IssueDetailPage;
