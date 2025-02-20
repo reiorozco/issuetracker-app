@@ -12,10 +12,10 @@ import "easymde/dist/easymde.min.css";
 import axios from "axios";
 import { z } from "zod";
 import { Issue } from "@prisma/client";
-import { IssueSchema } from "@/app/validationSchemas";
+import { issueSchema } from "@/app/validationSchemas";
 import { ErrorMessage, TwSpinner } from "@/app/components";
 
-type IssueFormData = z.infer<typeof IssueSchema>;
+type IssueFormData = z.infer<typeof issueSchema>;
 
 function IssueForm({ issue }: { issue?: Issue }) {
   const [error, setError] = useState("");
@@ -28,7 +28,7 @@ function IssueForm({ issue }: { issue?: Issue }) {
     handleSubmit,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(IssueSchema),
+    resolver: zodResolver(issueSchema),
   });
 
   const SimpleMDEOptions = useMemo(() => {
