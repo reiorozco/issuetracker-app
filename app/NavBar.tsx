@@ -5,9 +5,12 @@ import Link from "next/link";
 import classNames from "classnames";
 import { MdBugReport } from "react-icons/md";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import { Box } from "@radix-ui/themes";
 
 function NavBar() {
   const currentPath = usePathname();
+  const { status, data: session } = useSession();
   console.log("currentPath: ", currentPath);
 
   const links = [
@@ -37,6 +40,16 @@ function NavBar() {
           </li>
         ))}
       </ul>
+
+      <Box>
+        {status === "authenticated" && (
+          <Link href="/api/auth/signout">Log out ({session?.user?.name})</Link>
+        )}
+
+        {status === "unauthenticated" && (
+          <Link href="/api/auth/signin">Login</Link>
+        )}
+      </Box>
     </nav>
   );
 }
