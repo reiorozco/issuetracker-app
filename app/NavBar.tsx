@@ -5,7 +5,14 @@ import Link from "next/link";
 import classNames from "classnames";
 import { MdBugReport } from "react-icons/md";
 import { usePathname } from "next/navigation";
-import { Avatar, Box, Container, DropdownMenu, Flex } from "@radix-ui/themes";
+import {
+  Avatar,
+  Box,
+  Container,
+  DropdownMenu,
+  Flex,
+  Spinner,
+} from "@radix-ui/themes";
 import { useSession } from "next-auth/react";
 
 function NavBar() {
@@ -31,7 +38,7 @@ function NavBar() {
 function AuthStatus() {
   const { status, data: session } = useSession();
 
-  if (status === "loading") return null;
+  if (status === "loading") return <Spinner size="3" />;
 
   if (status === "unauthenticated")
     return (
