@@ -1,45 +1,47 @@
 import React from "react";
+import NextLink from "next/link";
 import delay from "delay";
 import { Flex, Table } from "@radix-ui/themes";
 import { prisma } from "@/prisma/client";
 import IssueActions from "@/app/issues/IssueActions";
 import { IssueStatusBadge, Link } from "@/app/components";
-import { MdArrowUpward, MdArrowDownward } from "react-icons/md";
-
+import { MdArrowDownward, MdArrowUpward } from "react-icons/md";
 import { Issue, Prisma, Status } from "@prisma/client";
-import NextLink from "next/link";
-import SortOrder = Prisma.SortOrder;
 
-interface Props {
-  searchParams: {
-    status: Status;
-    orderBy: keyof Issue;
-    sortOrder: SortOrder;
-  };
+interface SearchParams {
+  status: Status;
+  orderBy: keyof Issue;
+  sortOrder: Prisma.SortOrder;
 }
 
+interface Props {
+  searchParams: SearchParams;
+}
+
+const columns: { label: string; value: keyof Issue; className?: string }[] = [
+  { label: "Issue", value: "title" },
+  { label: "Status", value: "status", className: "hidden md:table-cell" },
+  { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
+];
+
 async function IssuesPage({ searchParams }: Props) {
-  const columns: { label: string; value: keyof Issue; className?: string }[] = [
-    { label: "Issue", value: "title" },
-    { label: "Status", value: "status", className: "hidden md:table-cell" },
-    { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
-  ];
-
-  console.log("searchParams: %o", searchParams);
-
-  const statuses = Object.values(Status);
-  const status = statuses.includes(searchParams.status)
+  const validStatus = Object.values(Status).includes(searchParams.status)
     ? searchParams.status
     : undefined;
+  const isValidSortOrder = Object.values(Prisma.SortOrder).includes(
+    searchParams.sortOrder,
+  );
+  const isValidOrderBy = columns.some(
+    (col) => col.value === searchParams.orderBy,
+  );
 
-  const sortOrder = Object.values(SortOrder).includes(searchParams.sortOrder);
   const orderBy =
-    columns.map((col) => col.value).includes(searchParams.orderBy) && sortOrder
+    isValidOrderBy && isValidSortOrder
       ? { [searchParams.orderBy]: searchParams.sortOrder }
       : undefined;
 
   const issues = await prisma.issue.findMany({
-    where: { status },
+    where: { status: validStatus },
     orderBy,
   });
 
