@@ -1,16 +1,27 @@
 import React from "react";
 import delay from "delay";
-import { Table } from "@radix-ui/themes";
+import { Flex, Table } from "@radix-ui/themes";
 import { prisma } from "@/prisma/client";
 import IssueActions from "@/app/issues/IssueActions";
 import { IssueStatusBadge, Link } from "@/app/components";
-import { Status } from "@prisma/client";
+import { MdArrowUpward } from "react-icons/md";
+
+import { Issue, Status } from "@prisma/client";
+import NextLink from "next/link";
 
 interface Props {
-  searchParams: { status: Status };
+  searchParams: { status: Status; orderBy: keyof Issue };
 }
 
 async function IssuesPage({ searchParams }: Props) {
+  const columns: { label: string; value: keyof Issue; className?: string }[] = [
+    { label: "Issue", value: "title" },
+    { label: "Status", value: "status", className: "hidden md:table-cell" },
+    { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
+  ];
+
+  console.log("searchParams: %o", searchParams);
+
   const statuses = Object.values(Status);
   const status = statuses.includes(searchParams.status)
     ? searchParams.status
@@ -32,15 +43,18 @@ async function IssuesPage({ searchParams }: Props) {
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Status
-            </Table.ColumnHeaderCell>
-
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Created
-            </Table.ColumnHeaderCell>
+            {columns.map((col) => (
+              <Table.ColumnHeaderCell key={col.label} className={col.className}>
+                <NextLink
+                  href={{ query: { ...searchParams, orderBy: col.value } }}
+                >
+                  <Flex align="center">
+                    {col.label}
+                    {col.value === searchParams.orderBy && <MdArrowUpward />}
+                  </Flex>
+                </NextLink>
+              </Table.ColumnHeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
 
