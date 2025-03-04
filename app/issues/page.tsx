@@ -4,13 +4,18 @@ import { Flex, Table } from "@radix-ui/themes";
 import { prisma } from "@/prisma/client";
 import IssueActions from "@/app/issues/IssueActions";
 import { IssueStatusBadge, Link } from "@/app/components";
-import { MdArrowUpward } from "react-icons/md";
+import { MdArrowUpward, MdArrowDownward } from "react-icons/md";
 
-import { Issue, Status } from "@prisma/client";
+import { Issue, Prisma, Status } from "@prisma/client";
 import NextLink from "next/link";
+import SortOrder = Prisma.SortOrder;
 
 interface Props {
-  searchParams: { status: Status; orderBy: keyof Issue };
+  searchParams: {
+    status: Status;
+    orderBy: keyof Issue;
+    sortOrder: SortOrder;
+  };
 }
 
 async function IssuesPage({ searchParams }: Props) {
@@ -27,8 +32,15 @@ async function IssuesPage({ searchParams }: Props) {
     ? searchParams.status
     : undefined;
 
+  const sortOrder = Object.values(SortOrder).includes(searchParams.sortOrder);
+  const orderBy =
+    columns.map((col) => col.value).includes(searchParams.orderBy) && sortOrder
+      ? { [searchParams.orderBy]: searchParams.sortOrder }
+      : undefined;
+
   const issues = await prisma.issue.findMany({
     where: { status },
+    orderBy,
   });
 
   const result = await delay(1000, { value: "🦄" });
@@ -46,11 +58,21 @@ async function IssuesPage({ searchParams }: Props) {
             {columns.map((col) => (
               <Table.ColumnHeaderCell key={col.label} className={col.className}>
                 <NextLink
-                  href={{ query: { ...searchParams, orderBy: col.value } }}
+                  href={{
+                    query: {
+                      ...searchParams,
+                      orderBy: col.value,
+                      sortOrder:
+                        searchParams.sortOrder === "asc" ? "desc" : "asc",
+                    },
+                  }}
                 >
                   <Flex align="center">
                     {col.label}
-                    {col.value === searchParams.orderBy && <MdArrowUpward />}
+                    {col.value === searchParams.orderBy &&
+                      searchParams.sortOrder === "asc" && <MdArrowUpward />}
+                    {col.value === searchParams.orderBy &&
+                      searchParams.sortOrder === "desc" && <MdArrowDownward />}
                   </Flex>
                 </NextLink>
               </Table.ColumnHeaderCell>
