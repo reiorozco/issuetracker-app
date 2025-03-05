@@ -7,11 +7,13 @@ import IssueActions from "@/app/issues/IssueActions";
 import { IssueStatusBadge, Link } from "@/app/components";
 import { MdArrowDownward, MdArrowUpward } from "react-icons/md";
 import { Issue, Prisma, Status } from "@prisma/client";
+import Pagination from "@/app/components/Pagination";
 
 interface SearchParams {
   status: Status;
   orderBy: keyof Issue;
   sortOrder: Prisma.SortOrder;
+  page: string;
 }
 
 interface Props {
@@ -28,6 +30,7 @@ async function IssuesPage({ searchParams }: Props) {
   const validStatus = Object.values(Status).includes(searchParams.status)
     ? searchParams.status
     : undefined;
+  const where = { status: validStatus };
   const isValidSortOrder = Object.values(Prisma.SortOrder).includes(
     searchParams.sortOrder,
   );
@@ -40,9 +43,18 @@ async function IssuesPage({ searchParams }: Props) {
       ? { [searchParams.orderBy]: searchParams.sortOrder }
       : undefined;
 
-  const issues = await prisma.issue.findMany({
-    where: { status: validStatus },
+  const page = Number(searchParams.page) || 1;
+  const pageSize = 7;
+
+  const issues: Issue[] = await prisma.issue.findMany({
+    where,
     orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize,
+  });
+
+  const issueCount = await prisma.issue.count({
+    where,
   });
 
   const result = await delay(1000, { value: "🦄" });
@@ -54,7 +66,7 @@ async function IssuesPage({ searchParams }: Props) {
 
       <IssueActions />
 
-      <Table.Root variant="surface">
+      <Table.Root variant="surface" mb="2">
         <Table.Header>
           <Table.Row>
             {columns.map((col) => (
@@ -104,6 +116,12 @@ async function IssuesPage({ searchParams }: Props) {
           ))}
         </Table.Body>
       </Table.Root>
+
+      <Pagination
+        itemCount={issueCount}
+        pageSize={pageSize}
+        currentPage={page}
+      />
     </div>
   );
 }
