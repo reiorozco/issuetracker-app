@@ -5,7 +5,7 @@ import IssueStatusFilter from "@/app/issues/IssueStatusFilter";
 
 function IssueActions() {
   return (
-    <Flex justify="between" my="4">
+    <Flex justify="between">
       <IssueStatusFilter />
 
       <Button>
