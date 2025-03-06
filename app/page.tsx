@@ -1,6 +1,5 @@
-import Pagination from "@/app/components/Pagination";
-
 import "./theme-config.css";
+import LatestIssues from "@/app/LatestIssues";
 
 export default function Home({
   searchParams,
@@ -9,15 +8,5 @@ export default function Home({
 }) {
   console.log(searchParams);
 
-  return (
-    <div>
-      <h1>Hello Next.js</h1>
-
-      <Pagination
-        itemCount={100}
-        pageSize={10}
-        currentPage={Number(searchParams.page)}
-      />
-    </div>
-  );
+  return <LatestIssues />;
 }
