@@ -3,13 +3,19 @@ import NextLink from "next/link";
 import { Status } from "@prisma/client";
 import { Card, Flex, Text } from "@radix-ui/themes";
 
-interface Props {
+interface IssuesCount {
   open: number;
   inProgress: number;
   closed: number;
 }
 
-function IssueSummary({ open, closed, inProgress }: Props) {
+interface Props {
+  issuesCount: IssuesCount;
+}
+
+function IssueSummary({ issuesCount }: Props) {
+  const { open, inProgress, closed } = issuesCount;
+
   const statuses: { label: string; value: number; status: Status }[] = [
     {
       label: "Open Issues",
@@ -34,11 +40,9 @@ function IssueSummary({ open, closed, inProgress }: Props) {
         <Card key={label} asChild variant="surface">
           <NextLink href={`/issues?status=${status}`}>
             <Flex direction="column" gap="2">
-              <Text as="div" >
-                {label}
-              </Text>
+              <Text as="div">{label}</Text>
 
-              <Text as="div"  weight="bold">
+              <Text as="div" weight="bold">
                 {value}
               </Text>
             </Flex>

@@ -12,13 +12,19 @@ import {
   YAxis,
 } from "recharts";
 
-interface Props {
+interface IssuesCount {
   open: number;
   inProgress: number;
   closed: number;
 }
 
-function IssueChart({ open, closed, inProgress }: Props) {
+interface Props {
+  issuesCount: IssuesCount;
+}
+
+function IssueChart({ issuesCount }: Props) {
+  const { open, inProgress, closed } = issuesCount;
+
   const data = [
     {
       label: "Open",

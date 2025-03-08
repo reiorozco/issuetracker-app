@@ -21,9 +21,9 @@ export default async function Home({
   return (
     <Grid columns={{ initial: "1", md: "2" }} gap="4">
       <Flex direction="column" gap="4">
-        <IssueSummary open={open} inProgress={inProgress} closed={closed} />
+        <IssueSummary issuesCount={{ open, inProgress, closed }} />
 
-        <IssueChart open={open} inProgress={inProgress} closed={closed} />
+        <IssueChart issuesCount={{ open, inProgress, closed }} />
       </Flex>
 
       <LatestIssues />
