@@ -1,4 +1,5 @@
 import React from "react";
+import { Metadata } from "next";
 import delay from "delay";
 import { prisma } from "@/prisma/client";
 import IssueActions from "@/app/issues/IssueActions";
@@ -59,6 +60,11 @@ async function IssuesPage({ searchParams }: Props) {
     </Flex>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Issue Tracker - Issue List",
+  description: "View all project issues.",
+};
 
 export const dynamic = "force-dynamic";
 
