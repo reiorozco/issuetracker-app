@@ -25,6 +25,8 @@ function AssigneeSelect({ issue }: { issue: Issue }) {
       console.log("Patch issue ok.");
       router.refresh();
     } catch (err) {
+      console.error("Assign issue: ", err);
+
       toast.error("Changes could not be saved.");
     }
   };
