@@ -13,7 +13,7 @@ import {
   Flex,
   Spinner,
 } from "@radix-ui/themes";
-import { useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 function NavBar() {
   return (
@@ -42,9 +42,12 @@ function AuthStatus() {
 
   if (status === "unauthenticated")
     return (
-      <Link href="/api/auth/signin" className="nav-link">
+      <button
+        className="nav-link"
+        onClick={() => signIn("google", { callbackUrl: "/" })}
+      >
         Login
-      </Link>
+      </button>
     );
 
   return (
@@ -64,8 +67,12 @@ function AuthStatus() {
           <DropdownMenu.Label>{session?.user?.email}</DropdownMenu.Label>
 
           <DropdownMenu.Separator />
-          <DropdownMenu.Item color="tomato">
-            <Link href="/api/auth/signout">Log out</Link>
+          <DropdownMenu.Item
+            color="tomato"
+            className="!cursor-pointer"
+            onClick={() => signOut({ callbackUrl: "/" })}
+          >
+            Log out
           </DropdownMenu.Item>
         </DropdownMenu.Content>
       </DropdownMenu.Root>

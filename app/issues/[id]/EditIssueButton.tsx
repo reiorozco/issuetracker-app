@@ -5,10 +5,11 @@ import { Button } from "@radix-ui/themes";
 
 export default function EditIssueButton({ issueId }: { issueId: number }) {
   return (
-    <Button>
-      <MdOutlineEdit />
-
-      <Link href={`/issues/${issueId}/edit`}>Edit Issue</Link>
+    <Button asChild>
+      <Link href={`/issues/${issueId}/edit`}>
+        <MdOutlineEdit />
+        Edit Issue
+      </Link>
     </Button>
   );
 }
