@@ -1,14 +1,10 @@
 import React from "react";
-import dynamic from "next/dynamic";
-import LoadingNewIssuePage from "@/app/issues/new/loading";
-
-const IssueForm = dynamic(() => import("@/app/issues/_components/IssueForm"), {
-  ssr: false,
-  loading: () => <LoadingNewIssuePage />,
-});
+import NewIssueForm from "@/app/issues/new/NewIssueForm";
 
 function NewIssuePage() {
-  return <IssueForm />;
+  return <NewIssueForm />;
 }
+
+export const dynamic = "force-dynamic";
 
 export default NewIssuePage;

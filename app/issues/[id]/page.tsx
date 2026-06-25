@@ -11,7 +11,7 @@ import AssigneeSelect from "@/app/issues/[id]/AssigneeSelect";
 import StatusSelect from "@/app/issues/[id]/StatusSelect";
 
 interface Props {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 const fetchUser = cache((issueId: number) => {
@@ -20,10 +20,11 @@ const fetchUser = cache((issueId: number) => {
 
 async function IssueDetailPage({ params }: Props) {
   const session = await getServerSession(authOptions);
+  const { id } = await params;
 
-  if (isNaN(parseInt(params.id))) notFound();
+  if (isNaN(parseInt(id))) notFound();
 
-  const issue = await fetchUser(parseInt(params.id));
+  const issue = await fetchUser(parseInt(id));
   if (!issue) notFound();
 
   return (
@@ -47,7 +48,8 @@ async function IssueDetailPage({ params }: Props) {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const issue = await fetchUser(parseInt(params.id));
+  const { id } = await params;
+  const issue = await fetchUser(parseInt(id));
 
   return {
     title: issue?.title,
