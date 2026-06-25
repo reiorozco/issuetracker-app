@@ -6,13 +6,7 @@ import LatestIssues from "@/app/LatestIssues";
 import IssueSummary from "@/app/IssueSummary";
 import IssueChart from "@/app/IssueChart";
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: { page: string };
-}) {
-  console.log(searchParams);
-
+export default async function Home() {
   const open = await prisma.issue.count({ where: { status: "OPEN" } });
   const closed = await prisma.issue.count({ where: { status: "CLOSED" } });
   const inProgress = await prisma.issue.count({

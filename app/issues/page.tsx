@@ -9,27 +9,26 @@ import IssueTable, { columns, IssueQuery } from "@/app/issues/IssueTable";
 import { Flex } from "@radix-ui/themes";
 
 interface Props {
-  searchParams: IssueQuery;
+  searchParams: Promise<IssueQuery>;
 }
 
 async function IssuesPage({ searchParams }: Props) {
-  const validStatus = Object.values(Status).includes(searchParams.status)
-    ? searchParams.status
+  const query = await searchParams;
+  const validStatus = Object.values(Status).includes(query.status)
+    ? query.status
     : undefined;
   const where = { status: validStatus };
   const isValidSortOrder = Object.values(Prisma.SortOrder).includes(
-    searchParams.sortOrder,
+    query.sortOrder,
   );
-  const isValidOrderBy = columns.some(
-    (col) => col.value === searchParams.orderBy,
-  );
+  const isValidOrderBy = columns.some((col) => col.value === query.orderBy);
 
   const orderBy =
     isValidOrderBy && isValidSortOrder
-      ? { [searchParams.orderBy]: searchParams.sortOrder }
+      ? { [query.orderBy]: query.sortOrder }
       : undefined;
 
-  const page = Number(searchParams.page) || 1;
+  const page = Number(query.page) || 1;
   const pageSize = 7;
 
   const issues: Issue[] = await prisma.issue.findMany({
@@ -50,7 +49,7 @@ async function IssuesPage({ searchParams }: Props) {
     <Flex direction="column" gap="4">
       <IssueActions />
 
-      <IssueTable issues={issues} searchParams={searchParams} />
+      <IssueTable issues={issues} searchParams={query} />
 
       <Pagination
         itemCount={issueCount}
