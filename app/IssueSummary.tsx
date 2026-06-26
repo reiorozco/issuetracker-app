@@ -32,7 +32,7 @@ function IssueSummary({ issuesCount }: Props) {
           <Card key={status} asChild variant="surface" className="summary-card">
             <NextLink href={`/issues?status=${status}`}>
               <Flex direction="column" gap="2">
-                <Flex align="center" gap="2">
+                <Flex align="center" gap="2" className="summary-label">
                   <span
                     aria-hidden
                     style={{
