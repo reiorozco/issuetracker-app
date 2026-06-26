@@ -24,7 +24,7 @@ function IssueSummary({ issuesCount }: Props) {
   ];
 
   return (
-    <Flex gap="3" wrap="wrap">
+    <Flex gap="3" wrap="wrap" width="100%">
       {cards.map(({ value, status }) => {
         const { label, cssVar } = statusMeta[status];
 
