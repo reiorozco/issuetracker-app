@@ -29,10 +29,8 @@ body {
     font-weight: 500;
   }
 
-  /* Summary metric cards: equal width, with a clear clickable affordance. */
+  /* Summary metric cards: clear clickable affordance (sizing handled by Grid). */
   .summary-card {
-    flex: 1 1 0;
-    min-width: 8rem;
     transition:
       transform 150ms ease,
       box-shadow 150ms ease,

@@ -1,7 +1,7 @@
 import React from "react";
 import NextLink from "next/link";
 import { Status } from "@prisma/client";
-import { Card, Flex, Heading, Text } from "@radix-ui/themes";
+import { Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import { statusMeta } from "@/app/statusMeta";
 
 interface IssuesCount {
@@ -24,7 +24,7 @@ function IssueSummary({ issuesCount }: Props) {
   ];
 
   return (
-    <Flex gap="3" wrap="wrap" width="100%">
+    <Grid columns="3" gap="3" width="100%">
       {cards.map(({ value, status }) => {
         const { label, cssVar } = statusMeta[status];
 
@@ -55,7 +55,7 @@ function IssueSummary({ issuesCount }: Props) {
           </Card>
         );
       })}
-    </Flex>
+    </Grid>
   );
 }
 
