@@ -26,6 +26,7 @@ function IssueStatusFilter() {
 
       const currentOrderBy = searchParams.get("orderBy");
       const currentSortOrder = searchParams.get("sortOrder");
+      const currentQuery = searchParams.get("q");
 
       if (status !== ALL_STATUS) {
         params.set("status", status);
@@ -35,6 +36,9 @@ function IssueStatusFilter() {
       }
       if (currentSortOrder) {
         params.set("sortOrder", currentSortOrder);
+      }
+      if (currentQuery) {
+        params.set("q", currentQuery);
       }
 
       const queryString = params.toString() ? `?${params.toString()}` : "";
