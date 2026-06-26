@@ -11,6 +11,7 @@ export interface IssueQuery {
   orderBy: keyof Issue;
   sortOrder: Prisma.SortOrder;
   page: string;
+  q: string;
 }
 
 interface Props {

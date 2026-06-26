@@ -2,6 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import { prisma } from "@/prisma/client";
 import IssueActions from "@/app/issues/IssueActions";
+import IssuesEmptyState from "@/app/issues/IssuesEmptyState";
 import { Pagination } from "@/app/components";
 import { Issue, Prisma, Status } from "@prisma/client";
 import IssueTable, { columns, IssueQuery } from "@/app/issues/IssueTable";
@@ -16,7 +17,12 @@ async function IssuesPage({ searchParams }: Props) {
   const validStatus = Object.values(Status).includes(query.status)
     ? query.status
     : undefined;
-  const where = { status: validStatus };
+
+  const search = query.q?.trim();
+  const where: Prisma.IssueWhereInput = {
+    status: validStatus,
+    ...(search ? { title: { contains: search } } : {}),
+  };
   const isValidSortOrder = Object.values(Prisma.SortOrder).includes(
     query.sortOrder,
   );
@@ -45,13 +51,19 @@ async function IssuesPage({ searchParams }: Props) {
     <Flex direction="column" gap="4">
       <IssueActions />
 
-      <IssueTable issues={issues} searchParams={query} />
+      {issues.length === 0 ? (
+        <IssuesEmptyState />
+      ) : (
+        <>
+          <IssueTable issues={issues} searchParams={query} />
 
-      <Pagination
-        itemCount={issueCount}
-        pageSize={pageSize}
-        currentPage={page}
-      />
+          <Pagination
+            itemCount={issueCount}
+            pageSize={pageSize}
+            currentPage={page}
+          />
+        </>
+      )}
     </Flex>
   );
 }

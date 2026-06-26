@@ -4,9 +4,10 @@ import React, { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
+import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Callout, TextField } from "@radix-ui/themes";
-import { MdAdd, MdInfoOutline } from "react-icons/md";
+import { Button, TextField } from "@radix-ui/themes";
+import { MdAdd } from "react-icons/md";
 import EasyMDE from "easymde";
 import "easymde/dist/easymde.min.css";
 import axios from "axios";
@@ -18,7 +19,6 @@ import { ErrorMessage, TwSpinner } from "@/app/components";
 type IssueFormData = z.infer<typeof issueSchema>;
 
 function IssueForm({ issue }: { issue?: Issue }) {
-  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const router = useRouter();
@@ -45,26 +45,17 @@ function IssueForm({ issue }: { issue?: Issue }) {
       if (issue) await axios.patch(`/api/issues/${issue.id}`, data);
       else await axios.post("/api/issues", data);
 
+      toast.success(issue ? "Issue updated." : "Issue created.");
       router.push("/issues");
       router.refresh();
     } catch {
       setIsSubmitting(false);
-      setError("An unexpected error occurred.");
+      toast.error("An unexpected error occurred.");
     }
   });
 
   return (
     <div className="max-w-xl space-y-2">
-      {error && (
-        <Callout.Root color="tomato">
-          <Callout.Icon>
-            <MdInfoOutline />
-          </Callout.Icon>
-
-          <Callout.Text>{error}</Callout.Text>
-        </Callout.Root>
-      )}
-
       <form className="space-y-2" onSubmit={onSubmit}>
         <TextField.Root
           defaultValue={issue?.title}

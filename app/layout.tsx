@@ -5,6 +5,8 @@ import { Container, Theme } from "@radix-ui/themes";
 import NavBar from "@/app/NavBar";
 import QueryClientProvider from "@/app/QueryClientProvider";
 import AuthProvider from "@/app/auth/Provider";
+import Toaster from "@/app/Toaster";
+import KeyboardShortcuts from "@/app/KeyboardShortcuts";
 import { ThemeScript } from "@/app/ThemeScript";
 
 import "@radix-ui/themes/styles.css";
@@ -56,6 +58,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
               <main className="px-6 pb-16">
                 <Container>{children}</Container>
               </main>
+
+              <Toaster />
+              <KeyboardShortcuts />
             </Theme>
           </AuthProvider>
         </QueryClientProvider>

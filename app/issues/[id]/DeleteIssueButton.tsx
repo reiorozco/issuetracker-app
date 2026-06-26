@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { MdDeleteOutline } from "react-icons/md";
 import { AlertDialog, Button, Flex } from "@radix-ui/themes";
 import { TwSpinner } from "@/app/components";
 
 function DeleteIssueButton({ issueId }: { issueId: number }) {
-  const [error, setError] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
   const router = useRouter();
@@ -18,11 +18,12 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
       setIsDeleting(true);
       await axios.delete(`/api/issues/${issueId}`);
 
+      toast.success("Issue deleted.");
       router.push("/issues");
       router.refresh();
-    } catch (error) {
+    } catch {
       setIsDeleting(false);
-      setError(true);
+      toast.error("This issue could not be deleted.");
     }
   };
 
@@ -57,24 +58,6 @@ function DeleteIssueButton({ issueId }: { issueId: number }) {
                 Delete
               </Button>
             </AlertDialog.Action>
-          </Flex>
-        </AlertDialog.Content>
-      </AlertDialog.Root>
-
-      <AlertDialog.Root open={error}>
-        <AlertDialog.Content maxWidth="450px">
-          <AlertDialog.Title>Error</AlertDialog.Title>
-
-          <AlertDialog.Description size="2">
-            This issue could not be deleted.
-          </AlertDialog.Description>
-
-          <Flex gap="3" mt="4" justify="end">
-            <AlertDialog.Cancel onClick={() => setError(false)}>
-              <Button variant="soft" color="gray">
-                OK
-              </Button>
-            </AlertDialog.Cancel>
           </Flex>
         </AlertDialog.Content>
       </AlertDialog.Root>

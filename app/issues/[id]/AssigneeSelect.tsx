@@ -2,7 +2,7 @@
 
 import React from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Issue, User } from "@prisma/client";
 import { Select, Skeleton } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
@@ -22,11 +22,9 @@ function AssigneeSelect({ issue }: { issue: Issue }) {
         assignedToUserId: userId === "0" ? null : userId,
       });
 
-      console.log("Patch issue ok.");
+      toast.success("Assignee updated.");
       router.refresh();
-    } catch (err) {
-      console.error("Assign issue: ", err);
-
+    } catch {
       toast.error("Changes could not be saved.");
     }
   };
@@ -53,8 +51,6 @@ function AssigneeSelect({ issue }: { issue: Issue }) {
           </Select.Group>
         </Select.Content>
       </Select.Root>
-
-      <Toaster />
     </>
   );
 }

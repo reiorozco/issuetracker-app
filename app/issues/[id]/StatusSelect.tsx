@@ -2,7 +2,7 @@
 
 import React from "react";
 import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Issue, Status } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
@@ -22,11 +22,9 @@ function StatusSelect({ issue }: { issue: Issue }) {
         status,
       });
 
-      console.log("Patch issue ok.");
+      toast.success("Status updated.");
       router.refresh();
-    } catch (err) {
-      console.error("Update status: ", err);
-
+    } catch {
       toast.error("Changes could not be saved.");
     }
   };
@@ -48,8 +46,6 @@ function StatusSelect({ issue }: { issue: Issue }) {
           </Select.Group>
         </Select.Content>
       </Select.Root>
-
-      <Toaster />
     </>
   );
 }
