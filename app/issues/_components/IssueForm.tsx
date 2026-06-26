@@ -39,8 +39,6 @@ function IssueForm({ issue }: { issue?: Issue }) {
   }, []);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log("IssueForm: ", data);
-
     try {
       setIsSubmitting(true);
 
@@ -49,10 +47,8 @@ function IssueForm({ issue }: { issue?: Issue }) {
 
       router.push("/issues");
       router.refresh();
-    } catch (e) {
+    } catch {
       setIsSubmitting(false);
-
-      console.log("Error creating IssueForm: ", e);
       setError("An unexpected error occurred.");
     }
   });

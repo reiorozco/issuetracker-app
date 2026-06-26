@@ -10,6 +10,7 @@ import {
   IconButton,
 } from "@radix-ui/themes";
 import { IssueStatusBadge } from "@/app/components";
+import { formatDate } from "@/app/utils";
 import { Issue } from "@prisma/client";
 
 interface Props {
@@ -54,7 +55,7 @@ export default function IssueDetails({
         <DataList.Item>
           <DataList.Label minWidth="88px">Created</DataList.Label>
 
-          <DataList.Value>{createdAt.toDateString()}</DataList.Value>
+          <DataList.Value>{formatDate(createdAt)}</DataList.Value>
         </DataList.Item>
       </DataList.Root>
 

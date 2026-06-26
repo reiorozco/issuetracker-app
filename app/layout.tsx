@@ -5,8 +5,10 @@ import { Container, Theme } from "@radix-ui/themes";
 import NavBar from "@/app/NavBar";
 import QueryClientProvider from "@/app/QueryClientProvider";
 import AuthProvider from "@/app/auth/Provider";
+import { ThemeScript } from "@/app/ThemeScript";
 
 import "@radix-ui/themes/styles.css";
+import "./theme-config.css";
 import "./globals.css";
 
 const inter = Inter({
@@ -35,14 +37,23 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang="en">
-      <body className={inter.variable}>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body>
         <QueryClientProvider>
           <AuthProvider>
-            <Theme>
+            <Theme
+              appearance="inherit"
+              accentColor="iris"
+              grayColor="slate"
+              radius="large"
+              scaling="100%"
+            >
               <NavBar />
 
-              <main className="px-6">
+              <main className="px-6 pb-16">
                 <Container>{children}</Container>
               </main>
             </Theme>

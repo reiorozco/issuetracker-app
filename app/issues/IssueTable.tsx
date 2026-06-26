@@ -3,6 +3,7 @@ import NextLink from "next/link";
 import { MdArrowDownward, MdArrowUpward } from "react-icons/md";
 import { Flex, Table } from "@radix-ui/themes";
 import { IssueStatusBadge, Link } from "@/app/components";
+import { formatDate } from "@/app/utils";
 import { Issue, Prisma, Status } from "@prisma/client";
 
 export interface IssueQuery {
@@ -65,7 +66,7 @@ function IssueTable({ searchParams, issues }: Props) {
             </Table.Cell>
 
             <Table.Cell className="hidden md:table-cell">
-              {issue.createdAt.toDateString()}
+              {formatDate(issue.createdAt)}
             </Table.Cell>
           </Table.Row>
         ))}

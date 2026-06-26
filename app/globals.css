@@ -3,25 +3,59 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-
   --font-inter: "Inter", sans-serif;
 }
 
+html,
+body {
+  /* Let Radix tokens own the page background in both light and dark. */
+  background-color: var(--color-background);
+}
+
 @layer utilities {
+  /* Nav links: AA-compliant rest state (slate-11 ≈ 4.5:1+) that resolves
+     against light or dark automatically via Radix gray tokens. */
   .nav-link {
-    @apply text-zinc-400 hover:text-zinc-800 transition-colors;
+    color: var(--gray-11);
+    transition: color 150ms ease;
+  }
+
+  .nav-link:hover {
+    color: var(--gray-12);
+  }
+
+  .nav-link-active {
+    color: var(--gray-12);
+    font-weight: 500;
+  }
+
+  /* Summary metric cards: equal width, with a clear clickable affordance. */
+  .summary-card {
+    flex: 1 1 0;
+    min-width: 8rem;
+    transition:
+      transform 150ms ease,
+      box-shadow 150ms ease,
+      border-color 150ms ease;
+  }
+
+  .summary-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-4);
+  }
+
+  .summary-card:focus-visible {
+    outline: 2px solid var(--accent-8);
+    outline-offset: 2px;
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  /* :root { */
-  /*   --foreground-rgb: 255, 255, 255; */
-  /* } */
-}
+@media (prefers-reduced-motion: reduce) {
+  .summary-card {
+    transition: box-shadow 150ms ease;
+  }
 
-body {
-  color: rgb(var(--foreground-rgb));
+  .summary-card:hover {
+    transform: none;
+  }
 }

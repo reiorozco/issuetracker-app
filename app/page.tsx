@@ -1,7 +1,6 @@
-import "./theme-config.css";
 import { Metadata } from "next";
 import { prisma } from "@/prisma/client";
-import { Flex, Grid } from "@radix-ui/themes";
+import { Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import LatestIssues from "@/app/LatestIssues";
 import IssueSummary from "@/app/IssueSummary";
 import IssueChart from "@/app/IssueChart";
@@ -14,15 +13,26 @@ export default async function Home() {
   });
 
   return (
-    <Grid columns={{ initial: "1", md: "2" }} gap="4">
-      <Flex direction="column" gap="4">
-        <IssueSummary issuesCount={{ open, inProgress, closed }} />
-
-        <IssueChart issuesCount={{ open, inProgress, closed }} />
+    <Flex direction="column" gap="5">
+      <Flex direction="column" gap="1">
+        <Heading as="h1" size="6">
+          Dashboard
+        </Heading>
+        <Text color="gray" size="2">
+          An overview of your project issues.
+        </Text>
       </Flex>
 
-      <LatestIssues />
-    </Grid>
+      <Grid columns={{ initial: "1", md: "2" }} gap="4" align="start">
+        <Flex direction="column" gap="4">
+          <IssueSummary issuesCount={{ open, inProgress, closed }} />
+
+          <IssueChart issuesCount={{ open, inProgress, closed }} />
+        </Flex>
+
+        <LatestIssues />
+      </Grid>
+    </Flex>
   );
 }
 

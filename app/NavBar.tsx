@@ -8,27 +8,34 @@ import { usePathname } from "next/navigation";
 import {
   Avatar,
   Box,
+  Button,
   Container,
   DropdownMenu,
   Flex,
   Spinner,
 } from "@radix-ui/themes";
 import { signIn, signOut, useSession } from "next-auth/react";
+import ThemeToggle from "@/app/ThemeToggle";
 
 function NavBar() {
   return (
-    <nav className="border-b border-gray-200 mb-6 px-6 py-4">
+    <nav className="border-b mb-6 px-6 py-4" style={{ borderColor: "var(--gray-a5)" }}>
       <Container>
         <Flex justify="between" align="center">
-          <Flex align="center" gap="4">
-            <Link href="/">
-              <MdBugReport size="2em" />
+          <Flex align="center" gap="5">
+            <Link href="/" aria-label="Issue Tracker home">
+              <Flex align="center" style={{ color: "var(--accent-9)" }}>
+                <MdBugReport size="1.75em" />
+              </Flex>
             </Link>
 
             <NavLinks />
           </Flex>
 
-          <AuthStatus />
+          <Flex align="center" gap="3">
+            <ThemeToggle />
+            <AuthStatus />
+          </Flex>
         </Flex>
       </Container>
     </nav>
@@ -42,12 +49,14 @@ function AuthStatus() {
 
   if (status === "unauthenticated")
     return (
-      <button
-        className="nav-link"
+      <Button
+        variant="soft"
+        color="gray"
+        className="!cursor-pointer"
         onClick={() => signIn("google", { callbackUrl: "/" })}
       >
         Login
-      </button>
+      </Button>
     );
 
   return (
@@ -82,7 +91,6 @@ function AuthStatus() {
 
 function NavLinks() {
   const currentPath = usePathname();
-  console.log("currentPath: ", currentPath);
 
   const links = [
     { href: "/", label: "Dashboard" },
@@ -90,14 +98,15 @@ function NavLinks() {
   ];
 
   return (
-    <ul className="flex flex-wrap space-x-4">
+    <ul className="flex flex-wrap gap-5">
       {links.map(({ href, label }) => (
         <li key={label}>
           <Link
             href={href}
+            aria-current={currentPath === href ? "page" : undefined}
             className={classNames({
-              "nav-link": true,
-              "!text-zinc-900": currentPath === href,
+              "nav-link": currentPath !== href,
+              "nav-link-active": currentPath === href,
             })}
           >
             {label}

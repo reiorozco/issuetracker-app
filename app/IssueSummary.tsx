@@ -1,7 +1,8 @@
 import React from "react";
 import NextLink from "next/link";
 import { Status } from "@prisma/client";
-import { Card, Flex, Text } from "@radix-ui/themes";
+import { Card, Flex, Heading, Text } from "@radix-ui/themes";
+import { statusMeta } from "@/app/statusMeta";
 
 interface IssuesCount {
   open: number;
@@ -16,39 +17,44 @@ interface Props {
 function IssueSummary({ issuesCount }: Props) {
   const { open, inProgress, closed } = issuesCount;
 
-  const statuses: { label: string; value: number; status: Status }[] = [
-    {
-      label: "Open Issues",
-      value: open,
-      status: "OPEN",
-    },
-    {
-      label: "In-progress Issues",
-      value: inProgress,
-      status: "IN_PROGRESS",
-    },
-    {
-      label: "Closed Issues",
-      value: closed,
-      status: "CLOSED",
-    },
+  const cards: { value: number; status: Status }[] = [
+    { value: open, status: "OPEN" },
+    { value: inProgress, status: "IN_PROGRESS" },
+    { value: closed, status: "CLOSED" },
   ];
 
   return (
-    <Flex gap="4">
-      {statuses.map(({ label, status, value }) => (
-        <Card key={label} asChild variant="surface">
-          <NextLink href={`/issues?status=${status}`}>
-            <Flex direction="column" gap="2">
-              <Text as="div">{label}</Text>
+    <Flex gap="3" wrap="wrap">
+      {cards.map(({ value, status }) => {
+        const { label, cssVar } = statusMeta[status];
 
-              <Text as="div" weight="bold">
-                {value}
-              </Text>
-            </Flex>
-          </NextLink>
-        </Card>
-      ))}
+        return (
+          <Card key={status} asChild variant="surface" className="summary-card">
+            <NextLink href={`/issues?status=${status}`}>
+              <Flex direction="column" gap="2">
+                <Flex align="center" gap="2">
+                  <span
+                    aria-hidden
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: 9999,
+                      backgroundColor: cssVar,
+                    }}
+                  />
+                  <Text size="2" color="gray" weight="medium">
+                    {label}
+                  </Text>
+                </Flex>
+
+                <Heading as="h2" size="7" weight="bold">
+                  {value}
+                </Heading>
+              </Flex>
+            </NextLink>
+          </Card>
+        );
+      })}
     </Flex>
   );
 }
