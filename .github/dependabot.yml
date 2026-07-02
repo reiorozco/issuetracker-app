@@ -28,6 +28,33 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "@types/*"
         update-types: ["version-update:semver-major"]
+      # majors con breaking real que requieren migracion dedicada, no un bump:
+      #  - next 16 + react 19: majors de framework (cambian runtime/tipos)
+      #  - tailwindcss 4: mueve el plugin PostCSS a @tailwindcss/postcss
+      #  - prisma 7: elimina url/directUrl del schema, obliga a prisma.config.ts
+      #  - zod 4: cambia API y acopla con @hookform/resolvers v4
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "prisma"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@prisma/client"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "zod"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@hookform/resolvers"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "recharts"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-markdown"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "delay"
+        update-types: ["version-update:semver-major"]
     commit-message:
       prefix: "chore(deps)"
       prefix-development: "chore(deps-dev)"
