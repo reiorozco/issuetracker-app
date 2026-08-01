@@ -44,7 +44,7 @@
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.12",
     "eslint-config-prettier": "^10.1.8",
-    "postcss": "^8.5.16",
+    "postcss": "^8.5.18",
     "prettier": "^3.9.4",
     "tailwindcss": "^4.3.2",
     "typescript": "^5"
@@ -52,7 +52,7 @@
   "overrides": {
     "uuid": "^11.1.1",
     "postcss": "$postcss",
-    "@hono/node-server": "^1.19.13",
+    "@hono/node-server": "^2.0.5",
     "brace-expansion@1": "1.1.16",
     "brace-expansion@5": "^5.0.8",
     "sharp": "^0.35.0",
